@@ -16,8 +16,8 @@
         </div>
         <div class="form-row">
             <div class="form-group">
-                <label for="new_password">New Password</label>
-                <input type="password" id="new_password" name="new_password" required autocomplete="new-password">
+                <label for="new_password">New Password <span class="text-muted" style="font-weight:400">(min. 8 characters)</span></label>
+                <input type="password" id="new_password" name="new_password" required autocomplete="new-password" minlength="8">
             </div>
             <div class="form-group">
                 <label for="confirm_password">Confirm New Password</label>

@@ -64,7 +64,10 @@ usort($auctions, fn($a, $b) => strcmp($b['finish_date'], $a['finish_date']));
                         <?php endif; ?>
                     </td>
                     <td>
-                        <?php if (!empty($a['link'])): ?>
+                        <?php
+                        $link_scheme = strtolower(parse_url($a['link'] ?? '', PHP_URL_SCHEME) ?? '');
+                        if (in_array($link_scheme, ['http', 'https'], true)):
+                        ?>
                         <a href="<?= htmlspecialchars($a['link']) ?>" target="_blank" rel="noopener noreferrer" class="icon-link" title="Open auction">
                             <i class="fas fa-external-link-alt"></i>
                         </a>

@@ -33,7 +33,10 @@ usort($auctions, fn($a, $b) => strcmp($b['date_added'], $a['date_added']));
                     <td><?= htmlspecialchars($a['date_added']) ?></td>
                     <td><?= htmlspecialchars($a['finish_date']) ?></td>
                     <td>
-                        <?php if (!empty($a['link'])): ?>
+                        <?php
+                        $link_scheme = strtolower(parse_url($a['link'] ?? '', PHP_URL_SCHEME) ?? '');
+                        if (in_array($link_scheme, ['http', 'https'], true)):
+                        ?>
                         <a href="<?= htmlspecialchars($a['link']) ?>" target="_blank" rel="noopener noreferrer" class="icon-link" title="Open auction">
                             <i class="fas fa-external-link-alt"></i>
                         </a>

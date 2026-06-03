@@ -1,6 +1,10 @@
 <?php
+session_start();
 header('Content-Type: application/json');
+require_once '../includes/auth.php';
 require_once '../includes/db.php';
+
+require_auth();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -23,13 +27,20 @@ foreach (['title', 'date_added', 'investment_cost'] as $field) {
     }
 }
 
+// Only allow http/https links
+$link = $data['link'] ?? '';
+$link_scheme = strtolower(parse_url($link, PHP_URL_SCHEME) ?? '');
+if ($link !== '' && !in_array($link_scheme, ['http', 'https'], true)) {
+    $link = '';
+}
+
 $auction = add_auction([
-    'link'            => $data['link'] ?? '',
+    'link'            => $link,
     'production_year' => $data['production_year'] ?? '',
     'title'           => $data['title'],
     'category'        => $data['category'] ?? '',
     'date_added'      => $data['date_added'],
-    'finish_date'     => $data['finish_date'],
+    'finish_date'     => $data['finish_date'] ?? '',
     'investment_cost' => (float)$data['investment_cost'],
     'status'          => !empty($data['sold']) ? 'finished' : 'live',
 ]);

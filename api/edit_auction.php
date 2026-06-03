@@ -1,6 +1,10 @@
 <?php
+session_start();
 header('Content-Type: application/json');
+require_once '../includes/auth.php';
 require_once '../includes/db.php';
+
+require_auth();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -20,6 +24,14 @@ $updates = [];
 foreach ($allowed as $field) {
     if (array_key_exists($field, $data)) {
         $updates[$field] = $field === 'investment_cost' ? (float)$data[$field] : $data[$field];
+    }
+}
+
+// Only allow http/https links
+if (isset($updates['link']) && $updates['link'] !== '') {
+    $link_scheme = strtolower(parse_url($updates['link'], PHP_URL_SCHEME) ?? '');
+    if (!in_array($link_scheme, ['http', 'https'], true)) {
+        $updates['link'] = '';
     }
 }
 

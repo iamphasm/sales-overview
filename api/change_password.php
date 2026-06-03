@@ -16,9 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $data = json_decode(file_get_contents('php://input'), true);
-$current  = $data['current_password']  ?? '';
-$new      = $data['new_password']      ?? '';
-$confirm  = $data['confirm_password']  ?? '';
+$current = $data['current_password']  ?? '';
+$new     = $data['new_password']      ?? '';
+$confirm = $data['confirm_password']  ?? '';
 
 $config = get_config();
 
@@ -28,9 +28,9 @@ if (!password_verify($current, $config['password_hash'])) {
     exit;
 }
 
-if (strlen($new) < 4) {
+if (strlen($new) < 8) {
     http_response_code(400);
-    echo json_encode(['error' => 'New password must be at least 4 characters.']);
+    echo json_encode(['error' => 'New password must be at least 8 characters.']);
     exit;
 }
 
@@ -42,5 +42,7 @@ if ($new !== $confirm) {
 
 $config['password_hash'] = password_hash($new, PASSWORD_BCRYPT);
 save_config($config);
+
+session_regenerate_id(true);
 
 echo json_encode(['success' => true]);

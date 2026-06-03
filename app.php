@@ -1,6 +1,6 @@
 <?php
-session_start();
 require_once 'includes/auth.php';
+secure_session_start();
 require_once 'includes/db.php';
 
 require_auth();

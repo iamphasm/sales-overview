@@ -1,6 +1,6 @@
 <?php
-session_start();
 require_once 'includes/auth.php';
+secure_session_start();
 
 if (!empty($_SESSION['logged_in'])) {
     header('Location: app.php');
@@ -13,6 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
 
     if (check_login($username, $password)) {
+        session_regenerate_id(true);
         $_SESSION['logged_in'] = true;
         header('Location: app.php');
         exit;
